@@ -2,6 +2,8 @@
 import ContactCTA from '../components/ContactCTA.astro';
 import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Image from 'astro/components/Image.astro';
+import tanmay from '@media/tanmay2.jpg';
 ---
 
 <BaseLayout title="About | Tanmay Band" description="About Tanmay Band Lorem Ipsum">
@@ -9,13 +11,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		<main class="wrapper about">
 			<Hero
 				title="About"
-				tagline="Thanks for stopping by. Read below to learn more about myself and my background."
+				tagline="Thanks for stopping by! Read below to learn more about myself and my background."
 			>
-				<img
-					width="1553"
-					height="873"
-					src="/assets/at-work.jpg"
+				<Image
+					height={500}
+					src={tanmay}
 					alt="Tanmay Band at work with a colleague"
+					style="margin: auto"
 				/>
 			</Hero>
 

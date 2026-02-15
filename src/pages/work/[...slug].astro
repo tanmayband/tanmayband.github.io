@@ -43,16 +43,18 @@ const ctaTexts: { [key: string]: string } = {
 			<header>
 				<div class="wrapper stack gap-2">
 					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Work</a>
-					<Hero title={entry.data.title} align="start">
+					<Hero title={entry.data.title} align="start"
+						tagline={entry.data.description}
+					>
 						<div class="details">
-							<p class="description">{entry.data.description}</p>
-							<div class="tags">
-								{entry.data.engine && (
+							<!-- <p class="description">{entry.data.description}</p> -->
+							 {entry.data.engine && (
 									<Pill>
 										<Icon icon={entry.data.engine} size="1.33em" />{' '}
 										{engineNames[entry.data.engine]}
 									</Pill>
 								)}
+							<div class="tags">
 								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
 							</div>
 						</div>
@@ -73,6 +75,14 @@ const ctaTexts: { [key: string]: string } = {
 						<TableOfContents chapters={remarkPluginFrontmatter.tableOfContents} />
 						<div class="content">
 							<Content/>
+
+							{entry.data.cta && entry.data.cta[0] && entry.data.cta[1] && (
+								<CallToAction href={entry.data.cta[1]}>
+									{ctaTexts[entry.data.cta[0]]}
+									<Icon icon="arrow-right" size="1.2em" />
+								</CallToAction>
+							)}
+					
 						</div>
 					</div>
 				</div>

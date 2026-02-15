@@ -14,10 +14,12 @@ cta:
   - itch
   - https://tanbanman.itch.io/eat-my-beat
 ---
+
 import ImageWithCaption from '../../components/ImageWithCaption.astro';
 import Callout from '../../components/Callout.astro';
 import EMB2 from '@media/eatmybeat-2.gif';
 import EMB3 from '@media/eatmybeat-3.gif';
+import YoutubeEmbed from '../../components/YoutubeEmbed.astro';
 
 ## What?
 A genre-mash circuit-building game that combines music with puzzles. Enemies arrive to the beat of a melody and your goal is to play this melody using a bunch of circuitry components.
@@ -44,10 +46,21 @@ I was inspired to make this by games like [Infinifactory](https://store.steampow
 3. A system for enemies to spawn and move according to the beat, along with detecting correct and incorrect notes played.
 4. A way to communicate the melody to be played visually.
 
-### Common component interface
-I created a common interface to represent the components and their connections, while providing enough flexibility to allow for a wide variety of component types. For generating the pulses, a global ticker was used to sync time steps across the level.
+### Component interface
+I created a common interface to represent components. This included input and output pins, along with common data (like current pulse ID and connected components) and functionality. This provided enough flexibility to allow for a wide variety of component types.
 
- which required careful consideration of timing and interactions between components.
+### Pulse propagation
+To generate the pulses, a global ticker was used to sync time steps across the circuit. Each generated pulse was assigned a unique ID, which was used to track its propagation through the circuit and avoid duplicate triggers. Each component had logic to determine how to handle incoming pulses and when to emit output pulses. 
 
- especially in terms of creating a user-friendly interface for building circuits and ensuring that the game mechanics were intuitive and engaging. I also had to implement a robust system for handling the timing of pulses and the interactions between different components.
+### Melody and enemies
+I used [MIDI](https://en.wikipedia.org/wiki/MIDI) files to represent melodies, which were parsed in C++ to extract note and timing information. This allowed for a visual representation of the melody, showing players which notes needed to be played and when. This was crucial for gameplay, as players needed to understand the timing and sequence of notes to build the correct circuits.
 
+This MIDI information was also used to spawn enemy waves:
+1. Spawn an enemy in the correct note-lane and at the correct distance from the piano.
+2. Move the enemy forward according to the global ticker.
+
+### Sandbox mode
+In addition to the campaign, I implemented a sandbox mode. While the original purpose was for testing my designs, it grew into a mode where players can freely experiment with building circuits. In addition, players can import their own MIDI files, and even export their circuits to share with others. These features made use of the file management system and save system of Unreal Engine.
+
+## Demo
+<YoutubeEmbed id="U30oxxeODmU" title="Eat My Beat demo" />
