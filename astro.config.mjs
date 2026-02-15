@@ -8,5 +8,7 @@ export default defineConfig({
    markdown: {
     remarkPlugins: [remarkTableOfContents],
   },
-  integrations: [mdx()]
+  integrations: [mdx()],
+  site: 'https://tanmayband.github.io',
+  base: '/personal-portfolio'
 });
