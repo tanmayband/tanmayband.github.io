@@ -10,5 +10,4 @@ export default defineConfig({
   },
   integrations: [mdx()],
   site: 'https://tanmayband.github.io'
-  // base: '/personal-portfolio'
 });
