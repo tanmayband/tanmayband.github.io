@@ -8,6 +8,7 @@ export const collections = {
 		schema: z.object({
 			title: z.string(),
 			description: z.string(),
+			summary: z.array(z.string()).length(3, "Exactly 3 summary lines are required"),
 			publishDate: z.coerce.date(),
 			tags: z.array(z.string()),
 			img: z.string(),
