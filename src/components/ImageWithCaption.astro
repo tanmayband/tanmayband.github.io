@@ -21,7 +21,7 @@ if (typeof src === "string") {
 }
 ---
 
-<figure class="img-caption-container">
+<figure class="img-caption-container rounded-box">
 	{
 		typeof src === "string" ? (
 			<Image src={src} alt={alt} width={width!} height={height!} />
@@ -35,12 +35,18 @@ if (typeof src === "string") {
 <style>
 	.img-caption-container {
 		margin-bottom: 1rem;
-	}
+		background: var(--gradient-subtle);
 
-	.img-caption-container .caption {
-		text-align: center;
-		font-size: 0.9rem;
-		color: var(--accent-dark);
-		margin-top: 0.5rem;
+		img {
+			border-radius: initial;
+			border: none;
+		}
+	
+		.caption {
+			text-align: center;
+			color: var(--accent-dark);
+			margin: 0.5rem;
+			font-size: var(--text-base);
+		}
 	}
 </style>

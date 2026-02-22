@@ -186,6 +186,15 @@ h5 {
 	font-size: var(--text-xl);
 }
 
+code 
+{
+	background-color: var(--gray-900);
+	border: 1px solid var(--gray-700);
+	border-radius: 5px;
+	padding: 4px;
+	font-size: var(--text-base);
+}
+
 /* Utilities */
 
 .sr-only {
@@ -210,6 +219,12 @@ h5 {
 .stack {
 	display: flex;
 	flex-direction: column;
+}
+
+.rounded-box {
+	border-radius: 1.5rem;
+	border: 1px solid var(--gray-800);
+	overflow: hidden;
 }
 
 .gap-2 {

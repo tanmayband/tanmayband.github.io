@@ -15,4 +15,89 @@ tags:
     - Boss Battle
 softwares:
     - unreal
+cta:
+    - itch
+    - https://tanbanman.itch.io/blasterchef
 ---
+
+import ImageWithCaption from '../../components/ImageWithCaption.astro';
+import Callout from '../../components/Callout.astro';
+import BC2 from '/public/assets/stock-1.jpg';
+import BC3 from '/public/assets/stock-1.jpg';
+import BC4 from '@media/blasterchef-4.gif'
+import BC5 from '@media/blasterchef-5.gif'
+import BC6 from '@media/blasterchef-6.gif'
+import BC7 from '@media/blasterchef-7.png'
+
+## What?
+A boss-battling game where you play as a tiny chef. Your job is to cook food and keep your adventurer fed who's actually fighting the boss. Your kitchen tools are your weapons.
+
+## Gameplay
+The core gameplay loop consists of grabbing ingredients from around the battle arena, cook them into a dish and serve it to your adventurer mid-battle. The adventurer's health replenishes based on the quality and quantity of the dish.
+All this time, you need to dodge the boss' attacks and minions.
+
+Each boss is based on a specific ingredient and the target recipe is derived from it.
+
+<Callout type="info" title="Example" body="A potato based boss lobs potatoes at you. Slice them, chuck into boiling oil and serve french fries to your adventurer. If some of them are burnt, the health replenished will be less." />
+
+<ImageWithCaption src={BC2} alt="Parry potato, slice, fry and serve to adventurer"/>
+
+As you progress through the levels:
+- More ingredients
+- More cooking methods
+- More complex bosses and minions
+
+<ImageWithCaption src={BC3} alt="Grapes, and minions made of potato"/>
+
+## Development
+Originally, this was a battle royale inside a giant kitchen, where two teams of tiny chefs compete to prepare a dish. After playing [Expedition 33](https://store.steampowered.com/app/1903340/Clair_Obscur_Expedition_33/), I was inspired to restructure the concept around boss-battles. From day 1, the game had to support multiplayer, so I encountered a lot of fun challenges.
+
+### Slicing meshes
+Slicing a mesh at arbitrary points means generating geometry on the fly. So, I needed some kind of a dynamic mesh. Luckily (albeit a bit confusingly), we have three options for Unreal:
+1. [Procedural Mesh Component](https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Plugins/ProceduralMeshComponent/UProceduralMeshComponent): The otiginal dynamic mesh, from UE4 days.
+2. [Dynamic Mesh Component](https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/GeometryFramework/UDynamicMeshComponent): Newer dynamic mesh, that integrates well with the [Geometry Script plugin](https://dev.epicgames.com/documentation/en-us/unreal-engine/geometry-scripting-users-guide-in-unreal-engine).
+3. [Realtime Mesh Component](https://www.fab.com/listings/bb2e4fbb-617c-41d3-aac6-e181eddf8b3b): A long-supported, community-driven replacement for the other two. Claims to be more efficient and flexible.
+
+While Realtime Mesh Component looked good, it seemed to be for more advanced cases, along with a steeper learning curve. To prototype faster, I decided on using the simpler Dynamic Mesh Component for all my slice-able ingredients. And after fiddling with world and local transforms for the correct cuts, I now had both vertical and horizontal cuts working.
+
+### Replicating slices
+During multiplayer, I got some bad news: Dynamic Mesh does not replicate out of the box. Not only are the slices not replicated, but the resulting pieces' transforms, velocities etc. are also not replicated. It's too much data to send for each mesh, which can choke the network for lots of pieces. What this means is when a player cut a potato in 4 pieces and moved one piece away, the other players won't see any of this development, only the initial undamaged potato.
+
+<ImageWithCaption src={BC4} alt="Default: Normal static mesh replicates out of the box, but not Dynamic Mesh"/>
+
+A starting point of this is: Replicate the slice **operation** manually. Every slice operation has a number of parameters, like the location and angle of the slice point. When player 1 fires a slice, we send this slice operation data to other players so that their copy of player 1 fires the exact same slice operation *locally*. By wrapping it in a reliable RPC, the slicing order is guaranteed, resulting in equal-looking pieces across all players.
+
+However, now I needed to solve the sliced pieces' transforms, so that moving them around is also replicated.
+
+<ImageWithCaption src={BC5} alt="Replicate the slice operation, but sliced piece movement doesn't work"/>
+
+### Replicating transforms
+There was a fundamental gap between the players: As far as the game was concerned, each piece was spawned locally. It wasn't "linked" to its corresponding copies on other machines. I needed a way to "connect" these pieces across the network, so that when piece 4 is moved by player 1, the game is aware of other piece 4s for other players and moves them.
+
+To start, I decided to assign IDs to these pieces, such that the IDs are consistent across players. The function `SplitMeshByComponents` returns all the individual pieces in an array. It internally uses triangle IDs to sort them, but this order varies across machines. So piece 4 will still have a different ID for each player. I needed a manual but **deterministic** sorting method.
+
+Since each piece occupies a unique space in the world, I used their centers of masses to sort them. This allowed me to have consistent piece IDs across machines. Now, when piece 4 (say piece id *piece4*) is moved by player 1, the game can now find *piece4*s on other machines and move them in sync.
+
+<ImageWithCaption src={BC6} alt="Deterministic IDs allow for transform replication"/>
+
+### Architecture
+Long story short, to manage ingredients and cooking effectively, a bunch of classes are used:
+1. `IngredientsOwner`: A replicated actor spawned by game mode at launch of a level. It manages creation and deletion of ingredient pieces, and has [ownership](https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-owner-and-owning-connection-in-unreal-engine) over them. It also provides mapping from a piece ID to the piece's mesh object.
+2. `IngredientManager`: A replicated actor component that tracks piece IDs and their transforms. Every player has one (to track the pieces they hold) and so does `IngredientsOwner`(to track pieces on the ground).
+3. `SlicingManager`: A replicated actor component, housed under `IngredientsOwner`, to pipe slicing-related RPCs.
+4. `CookingProcess`: A generic, replicated actor component, housed under a utensil or appliance, to represent the cooking process this utensil or appliance does. For example, an oven has a `CookingProcessBake`. This component synchronizes the current cooked state of pieces across players.
+
+<ImageWithCaption src={BC7} alt="Server-client architecture"/>
+
+### Boss battle
+With the basic mechanics out of the way, I built out rest of the boss battle pieces:
+1. AI for boss: Attack adventurer and spawn projectiles at players.
+2. AI for minions: Spawn out of unsliced projectiles and chase players.
+3. AI for adventurer: Attack boss, rush back to players when they ring a bell, consume food and head back to the boss.
+4. Scoring system for delivered dishes, so it influcences the adventurer's health recharge.
+5. Rudimentary parry system to slice projectiles mid-air.
+
+And the playable was ready!
+
+## Demo
+The demo contains 1 showcase boss battle.
