@@ -20,7 +20,7 @@ cta:
     - https://tanbanman.itch.io/eat-my-beat
 ---
 
-import ImageWithCaption from '../../components/ImageWithCaption.astro';
+import ContentWithCaption from '../../components/ContentWithCaption.astro';
 import Callout from '../../components/Callout.astro';
 import EMB2 from '@media/eatmybeat-2.gif';
 import EMB3 from '@media/eatmybeat-3.gif';
@@ -32,7 +32,7 @@ A genre-mash circuit-building game that combines music with puzzles. Enemies arr
 ## Gameplay
 The core gameplay loop consists of building a circuit that can play a melody. The circuit is built on a grid and consists of components that can be unlocked by progressing through the campaign. Each component has a specific function, and by strategically connecting them, players can create complex circuits that play the required melody and eliminate enemy waves.
 
-<ImageWithCaption src={EMB2} alt="Building and running a circuit"/>
+<ContentWithCaption src={EMB2} caption="Building and running a circuit"/>
 
 Components include:
 - **Pulser**: Generates periodic pulses based on a time signature, serving as the main beat provider.
@@ -40,7 +40,7 @@ Components include:
 - **Sequencer**: Sequentially activates the next output pin for each input pulse.
 - **Counter**: Emits one output pulse after a defined number of input pulses. Useful for creating delays.
 
-<ImageWithCaption src={EMB3} alt="Unlocking components"/>
+<ContentWithCaption src={EMB3} caption="Unlocking components"/>
 
 <Callout type="info" title="Upgrades" body="There is preparation for upgrades, which are supposed to be bought with in-game currency. Upgrades include controllable pulser rate, more output pins on sequencer etc." />
 
@@ -68,4 +68,4 @@ This MIDI information was also used to spawn enemy waves:
 In addition to the campaign, I implemented a sandbox mode. While the original purpose was for testing my designs, it grew into a mode where players can freely experiment with building circuits. In addition, players can import their own MIDI files, and even export their circuits to share with others. These features made use of the file management system and save system of Unreal Engine.
 
 ## Demo
-<YoutubeEmbed id="U30oxxeODmU" title="Eat My Beat demo" />
+<YoutubeEmbed id="U30oxxeODmU" caption="Eat My Beat demo" />

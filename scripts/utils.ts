@@ -17,8 +17,8 @@ export function sortByCustomOrder<T extends { id: string; }>(
 const workOrder = [
     "eat-my-beat",
     "blasterchef",
-    "spark-plugin",
     "80-lvl-3d-metasites",
+    "spark-plugin",
     "horror-doors",
     "hanx-101-trivia",
     "adventures-of-pi",

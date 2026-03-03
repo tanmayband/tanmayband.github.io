@@ -1,21 +1,25 @@
 ---
+import ContentWithCaption from './ContentWithCaption.astro'
+
 interface Props {
   id: string;
-  title?: string;
+  caption?: string;
 }
 
-const { id, title = "YouTube video" } = Astro.props;
+const { id, caption = "YouTube video" } = Astro.props;
 ---
 
-<div class="video rounded-box">
-  <iframe
+<ContentWithCaption caption={caption}>
+  <div slot="content" class="video">
+    <iframe
     src={`https://www.youtube.com/embed/${id}`}
-    title={title}
+    title={caption}
     loading="lazy"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     allowfullscreen>
   </iframe>
-</div>
+  </div>
+</ContentWithCaption>
 
 <style>
 .video {

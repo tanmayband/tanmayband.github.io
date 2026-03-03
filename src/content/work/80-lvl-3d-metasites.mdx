@@ -16,3 +16,78 @@ tags:
 softwares:
     - unreal
 ---
+
+import ContentWithCaption from '../../components/ContentWithCaption.astro';
+import YoutubeEmbed from '../../components/YoutubeEmbed.astro';
+import Callout from '../../components/Callout.astro';
+import EL1 from '@media/80lvl-1.png';
+import EL2 from '@media/80lvl-2.gif';
+
+## What?
+A suite of tools for Unreal Engine 5 creators to build their own Metasites, which were 3D experiences running in the browser, supported by [Xsolla Cloud Gaming](https://x.la/cloud-gaming). It included common game mechanics and additional functionality to seamlessly integrate with [80 Level](https://80.lv/)'s Metabrowser ecosystem.
+
+## Breakdown
+The suite consisted of:
+1. A **simple** template with a character, interactables and camera-switching.
+2. An **advanced** template with the above, plus objectives system, power system, health and ammo pickups, projectiles, and boss.
+3. Plugins for **inventory** management, cross-Metasite **DLCs** and frontend communication.
+
+### Templates
+Since the target audience included creators without programming experience, the templates were built in **blueprints**, with a focus on ease of use and extensibility. The [simple template](https://github.com/tanbanman-org/3D-Metasites-Starter-Project) was designed to be a starting point for creators to build interactive experiences, with a [detailed wiki](https://github.com/tanbanman-org/3D-Metasites-Starter-Project/wiki/3D-Metasites-Starter-Project) about its features.
+
+The [advanced template](https://github.com/tanbanman-org/3D-Metasites-The-Crossing) was built for [80 Level Community Metasites Challenge 2023](https://80.lv/articles/80-level-launches-a-community-metasites-challenge), where creators had to use this template to build unique and fun experiences. Included were:
+1. [Simple objectives system](https://github.com/tanbanman-org/3D-Metasites-The-Crossing?tab=readme-ov-file#objectives): Create objectives with different conditions and display them on-screen.
+2. [Power supply system](https://github.com/tanbanman-org/3D-Metasites-The-Crossing?tab=readme-ov-file#power-system): Create puzzles using power sources, pipes and power consumers. They could use interfaces to implement your own actors. Even daisy-chain power sources for more complex puzzles.
+3. [Pickups system](https://github.com/tanbanman-org/3D-Metasites-The-Crossing?tab=readme-ov-file#pickups): While the template included health and ammo pickups, they could create their own pickups with different effects by inheriting from a base class. Additionally included was spawn volume actor to randomly spawn pickups inside.
+4. [Simple projectiles](https://github.com/tanbanman-org/3D-Metasites-The-Crossing?tab=readme-ov-file#projectiles-and-weapons): Three types of projectiles that can be used for weapons. In the template, they were used for player's canon.
+5. [Boss](https://github.com/tanbanman-org/3D-Metasites-The-Crossing?tab=readme-ov-file#boss): A simple boss with a health bar, that had its own attacks and could be damaged by player's projectiles.
+
+<YoutubeEmbed id="2sq6jBUkSS8" caption="Challenge template walkthrough"/>
+
+### Plugins
+The Metabrowser initiative consisted of individual Metasites connected together through a common foundation. Features included objectives that could be tracked across unconnected experiences, and items unlocked in one experience could be used in another. To support this, I built three C++ plugins that creators could use to integrate their Metasites with the ecosystem:
+1. Centrifugo plugin for real-time communication between a Metasites and the browser frontend.
+2. DLC plugin to inject dynamic content into a Metasite at runtime.
+3. Inventory plugin to manage player's inventory.
+
+These plugins were written in C++, but provided blueprint-accessible functions. All three plugins could be used independently of each other, but also could be used together to create rich experiences, which was showcased in a demo template project.
+<Callout type="info" title="Example">
+    <div slot="content">
+    - A creator could add a **hammer** item to their Metasite. When the player picks it up, it gets added to their game inventory, and also to the their inventory on the backend via Centrifugo communication. 
+    
+    - Then, when the player visits another Metasite, Centrifugo tells the DLC plugin to download the hammer and add in their inventory. Now they can use the hammer in the new Metasite, even though it wasn't originally part of it.
+    </div>
+</Callout>
+
+#### Centrifugo plugin
+This plugin provided an interface to communicate with the browser frontend in real-time. It supported sending and receiving messages from the Centrifugo endpoint, which could be used to trigger events in the Metasite or update the frontend UI. This was crucial for features like cross-Metasite inventory and objectives tracking.
+
+#### DLC plugin
+This plugin provided classes and interfaces to create and export DLCs, and load DLCs at runtime. At its core, it relies on [Unreal's PAK filesystem](https://forums.unrealengine.com/t/in-unreal-5-whats-the-definitive-way-of-supporting-user-generated-content/1529487/3). PAK files are archive files that contain game assets. These files can be mounted (and unmounted) at runtime, allowing for dynamic content injection. The core classes that form the plugin were:
+1. `PakManagerSubsystem`: A subsystem that provided functions to download (using `PakDownloader`), mount and unmount PAK files at runtime.
+2. `PakData`: Each PAK downloaded was managed with this class, containing things like its ID, mount point, content path, and entry class.
+3. `DLCEntry`: Arguably, the most important part of the PAK pipeline, this was an interface that had to be added to the "main" class or blueprint of the DLC; the *entry point* for the DLC's functionality.
+4. `DLCManager`: A manager that exists per-DLC.
+
+<ContentWithCaption src={EL1} caption="DLC plugin architecture"/>
+
+Creators could make any kind of DLC with this, since the DLC's functionality was contained entirely inside the DLC's PAK.
+<Callout type="info" title="Examples">
+    <div slot="content">
+    1. A cosmetic DLC that adds a fountain.
+    2. A cosmetic DLC that adds new trees to the environment.
+    3. A **functionality** DLC that adds a lamp that can be turned on and off.
+    4. A **functionality** DLC that adds a new weapon, with its own projectiles and effects.
+    5. A **functionality** DLC that updates the floor in the base game to a new texture.
+        - DLCs that modify the base game content would be helped by some kind of a bridge between the two. This could take the form of actor tags, a collection of common interfaces etc. maintained by the Metabrowser team.
+    </div>
+</Callout>
+
+#### Inventory plugin
+This plugin provided a simple inventory system that creators could use to manage player's in-game inventory. It supported both consumable and non-consumable items.
+1. *Consumable items*: These items could be used directly from our inventory, without needing to spawn a physical actor out in the world. Example: Potions, medkits etc.
+2. *Non-consumable items*: These items had to be spawned in the world before use. Example: Flashlight, hammer, key etc.
+
+Items were created as data assets, which contained all the relevant information about the item, such as its name, description, icon etc. Furthermore, they also had instance-specific data, like the battery level of a flashlight. Classes, interfaces (and even actor components) were provided to make item creation as extensible as possible, so that creators could make items with unique functionality.
+
+<ContentWithCaption src={EL2} caption="DLC hammer added to inventory. Two cosmetic DLCs. Third DLC changes textures. Hammer is spawned and used."/>
