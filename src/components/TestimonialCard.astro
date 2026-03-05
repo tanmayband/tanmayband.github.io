@@ -1,0 +1,70 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+interface Props {
+	testimonial: CollectionEntry<'testimonials'>;
+}
+
+const { data, id } = Astro.props.testimonial;
+
+const work = await getCollection('work');
+
+const foundWork = work.find((entry) => {
+    return id === entry.id
+});
+const foundWorkPath = foundWork ? `/work/${foundWork.id}` : null;
+---
+
+<div class="testimonial-card">
+	{data.link ? 
+		<a href={data.link} target="_blank" rel="noopener noreferrer">
+			<p class="testimonial-person">{data.person} <Icon icon="arrow-up-right"/></p>
+		</a>
+		:
+		<p class="testimonial-person">{data.person}</p>
+	}
+	
+	{foundWork ? 
+		<a href={foundWorkPath} target="_blank">
+			<p class="testimonial-project">{data.project}</p>
+		</a>
+		:
+		<p class="testimonial-project">{data.project}</p>
+	}
+</div>
+
+<style>
+    .testimonial-card {
+		display: flex;
+		flex-direction: column;
+		height: 7rem;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		border: 1px solid var(--gray-800);
+		border-radius: 1.5rem;
+		color: var(--gray-100);
+		background: var(--gradient-subtle);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.testimonial-person {
+		font-size: var(--text-xl);
+	}
+
+	.testimonial-project {
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+	}
+
+	.testimonial-link {
+		
+	}
+
+	@media (min-width: 50em) {
+		.testimonial-card {
+			border-radius: 1.5rem;
+			height: 9.5rem;
+		}
+	}
+</style>

@@ -152,6 +152,14 @@ img {
 
 a {
 	color: var(--link-color);
+	text-decoration: 1px solid underline transparent;
+	text-underline-offset: 0.25em;
+	transition: text-decoration-color var(--theme-transition);
+}
+
+a:hover,
+a:focus {
+	text-decoration-color: currentColor;
 }
 
 h1,
@@ -194,6 +202,8 @@ code
 	padding: 4px;
 	font-size: var(--text-base);
 }
+
+
 
 /* Utilities */
 

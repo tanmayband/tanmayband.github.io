@@ -32,3 +32,15 @@ export async function sortWork()
     const workEntries = await getCollection("work");
     return sortByCustomOrder(workEntries, workOrder);
 }
+
+const testimonialsOrder = [
+    "hiddengem-gem-jam",
+    "hanx-101-trivia",
+    "80-lvl-3d-metasites"
+];
+
+export async function sortTestimonials()
+{
+    const testimonialsEntries = await getCollection("testimonials");
+    return sortByCustomOrder(testimonialsEntries, testimonialsOrder);
+}

@@ -17,4 +17,13 @@ export const collections = {
 			cta: z.array(z.string()).optional(),
 		}),
 	}),
+	testimonials: defineCollection({
+		// Load Markdown files in the src/content/testimonials directory.
+		loader: glob({ base: './src/content/testimonials', pattern: "**/*.{md,mdx}" }),
+		schema: z.object({
+			person: z.string(),
+			project: z.string(),
+			link: z.string().optional()
+		}),
+	}),
 };
