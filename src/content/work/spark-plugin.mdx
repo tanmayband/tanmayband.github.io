@@ -16,3 +16,33 @@ tags:
 softwares:
     - unreal
 ---
+
+## What?
+A plugin for Unreal Engine that allows developers to easily integrate [Spark AI sidekick](https://www.linkedin.com/posts/sonyj_we-started-with-a-simple-mission-optimize-activity-7358648538836164610-w-u7/) into their games. The plugin provides a simple interface for sending and receiving messages, as well as user profile and rewards.
+
+I implemented the following systems into the plugin:
+1. Gameplay screen recording using custom Pixel Streaming
+2. Chat system
+3. Telemetry collection of developer-defined events, and player inputs using Enhanced Input
+4. Save system for user profiles and rewards
+5. Integration with Spark's API and UI widgets for all of the above
+
+I'll go into brief detail about a couple of these systems below.
+
+## Custom Pixel Streaming
+[Pixel Streaming](https://dev.epicgames.com/documentation/en-us/unreal-engine/overview-of-pixel-streaming-in-unreal-engine) is Unreal's solution for cloud gaming. It streams rendered frames from Unreal to a web browser, and collects player input from the browser to send back to Unreal. It is built on top of [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) and is composed of 3 broad systems:
+1. Network connections: Connecting an Unreal game to a web brower using a [signaling server](https://dev.epicgames.com/documentation/en-us/unreal-engine/hosting-and-networking-guide-for-pixel-streaming-in-unreal-engine).
+2. Collecting game frames, encoding them and sending them to the browser.
+3. Collecting player input from the browser and sending it to Unreal.
+
+We did not need 3, since we only wanted to stream the gameplay and not handle player input. However, we needed to modify 1 and 2 to send the frames to Spark's servers instead of a web browser. Digging into Pixel Streaming's source, I discovered that the [SDP](https://www.tutorialspoint.com/webrtc/webrtc_session_description_protocol.htm) is key to establishing the connection and sending the frames to the right destination. I overrode the `FPixelStreamingSignallingConnection` to create a custom connection that uses a custom SDP to connect to Spark's servers. With this change, I was able to use the rest of Pixel Streaming's existing systems without modification, and stream gameplay to Spark's servers, with custom start/stop events.
+
+## Game Events Telemetry
+The telemetry system allowed us to capture Spark usage events, and it was also exposed to developers to capture their own gameplay events with custom data. For this generic, developer-defined event data, `FJsonSerializable`, `FJsonObject`, and even JSON-strings were supported.
+
+To ensure reliable delivery, I used Unreal's `FHttpRetrySystem` to automatically retry failed requests with exponential backoff.
+
+## Player Input Telemetry
+[Enhanced Input](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine) is the standard input system for Unreal 5 and up. It focuses on *actions* instead of raw keys, which allows for more flexible input mapping and handling. It also has built-in support for input contexts, which allow for different input mappings in different game states. To collect inputs for telemetry, my goal was to build a non-intrusive system that ran in the background. While a custom input component would have been the most straightforward solution, it would have required developers to use it instead of their existing input components.
+
+Instead, I created a system that listens to input events globally, using `UEnhancedInputLocalPlayerSubsystem`, which gives access to input actions and their current states. I hooked it up to a timer to periodically check the state of all input actions and fire a telemetry event whenever an action was triggered. Using `UInputDeviceSubsystem`, I was also able to collect information about the input device used (eg. Keyboard and Mouse, Gamepad etc.), which was included in the telemetry data. Lastly, `FHttpRetrySystem` came in handy again to ensure reliable delivery.
