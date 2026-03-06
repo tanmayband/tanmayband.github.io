@@ -20,8 +20,8 @@ softwares:
 import ContentWithCaption from '../../components/ContentWithCaption.astro';
 import YoutubeEmbed from '../../components/YoutubeEmbed.astro';
 import Callout from '../../components/Callout.astro';
-import EL1 from '@media/80lvl-1.png';
-import EL2 from '@media/80lvl-2.gif';
+import EL2 from '@media/80lvl-2.png';
+import EL3 from '@media/80lvl-3.gif';
 
 ## What?
 A suite of tools for Unreal Engine 5 creators to build their own Metasites, which were 3D experiences running in the browser, supported by [Xsolla Cloud Gaming](https://x.la/cloud-gaming). It included common game mechanics and additional functionality to seamlessly integrate with [80 Level](https://80.lv/)'s Metabrowser ecosystem.
@@ -69,7 +69,7 @@ This plugin provided classes and interfaces to create and export DLCs, and load 
 3. `DLCEntry`: Arguably, the most important part of the PAK pipeline, this was an interface that had to be added to the "main" class or blueprint of the DLC; the *entry point* for the DLC's functionality.
 4. `DLCManager`: A manager that exists per-DLC.
 
-<ContentWithCaption src={EL1} caption="DLC plugin architecture"/>
+<ContentWithCaption src={EL2} caption="DLC plugin architecture"/>
 
 Creators could make any kind of DLC with this, since the DLC's functionality was contained entirely inside the DLC's PAK.
 <Callout type="info" title="Examples">
@@ -90,4 +90,4 @@ This plugin provided a simple inventory system that creators could use to manage
 
 Items were created as data assets, which contained all the relevant information about the item, such as its name, description, icon etc. Furthermore, they also had instance-specific data, like the battery level of a flashlight. Classes, interfaces (and even actor components) were provided to make item creation as extensible as possible, so that creators could make items with unique functionality.
 
-<ContentWithCaption src={EL2} caption="DLC hammer added to inventory. Two cosmetic DLCs. Third DLC changes textures. Hammer is spawned and used."/>
+<ContentWithCaption src={EL3} caption="DLC hammer added to inventory. Two cosmetic DLCs. Third DLC changes textures. Hammer is spawned and used."/>
