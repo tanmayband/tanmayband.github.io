@@ -15,7 +15,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { sortWork, sortTestimonials } from '../../scripts/utils';
 
 // Content Fetching: List four most recent work projects
-const projects = (await sortWork()).slice(0, 4);
+const projects = (await sortWork()).slice(0, 6);
 
 const testimonials = await sortTestimonials();
 
@@ -36,6 +36,7 @@ const testimonials = await sortTestimonials();
 						<!-- <Pill><Icon icon="unreal" size="1.33em" /> Unreal Engine</Pill>
 						<Pill><Icon icon="unity" size="1.33em" /> Unity</Pill> -->
 						<Pill><Icon icon="code" size="1.33em" /> Developer</Pill>
+						<Pill><Icon icon="trend-up" size="1.33em" /> 0 to 1</Pill>
 						<Pill><Icon icon="palette" size="1.33em" /> Creative</Pill>
 						<Pill><Icon icon="trophy" size="1.33em" /> Leader</Pill>
 					</div>
@@ -116,7 +117,6 @@ const testimonials = await sortTestimonials();
 	.roles {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 0.5rem;
 	}
 
@@ -132,20 +132,21 @@ const testimonials = await sortTestimonials();
 		.hero {
 			display: grid;
 			/* grid-template-columns: 6fr 4fr; */
-			padding-inline: 2.5rem;
+			/* padding-inline: 2.5rem; */
 			gap: 3.75rem;
-		}
-
-		.roles {
-			margin-top: 0.5rem;
-			display: flex;
-			gap: 0.5rem;
 		}
 
 		.hero img {
 			aspect-ratio: 3 / 4;
 			border-radius: 4.5rem;
 			object-fit: cover;
+		}
+	}
+
+	@media (max-width: 50em) {
+		.roles {
+			margin-top: 0.5rem;
+			justify-content: center;
 		}
 	}
 
@@ -200,7 +201,7 @@ const testimonials = await sortTestimonials();
 		.section {
 			grid-template-columns: repeat(4, 1fr);
 			grid-template-areas: 'header header header header' 'gallery gallery gallery gallery';
-			gap: 5rem;
+			gap: 2rem;
 		}
 
 		.section.with-cta {
