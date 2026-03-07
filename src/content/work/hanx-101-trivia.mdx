@@ -8,7 +8,7 @@ description: |
 summary:
     - Versus mode and single-player "101 mode"
     - Built mechanics in Unity and backend in AWS
-    - Ported matchmaking to Apple’s GameKit
+    - Ported matchmaking to Apple's GameKit
 tags:
     - Multiplayer
     - Trivia
@@ -17,3 +17,32 @@ softwares:
     - unity
     - aws
 ---
+import Callout from '../../components/Callout.astro';
+
+## What?
+A multiplayer trivia game on Apple Arcade, created with actor Tom Hanks. You can play with friends, or play solo in 101 mode. The game features a variety of topics, along with unlockable rewards that you can use to top the scales in your favour.
+
+<Callout type="info" title="Note">
+    <div slot="content">
+        Archival information about the game can be found on [hanx101.com](https://www.hanx101.com/).
+    </div>
+</Callout>
+
+## Gameplay
+The core gameplay consists of answering questions across multiple topics, and collecting rewards at the end of each round. Two gameplay mode are available.
+### Versus mode
+Team up with another player for a 2v2, or go solo in a 1v1. Matchmaking is available to find other players, or you can directly invite your friends. Each match consists of multiple round. Between rounds, you can activate power ups to help you or damage your opponents in the next round. Powerups include:
+- Bonus question of a specific topic
+- Extra points to your for right answer
+- Negative points to opponent for right answer
+- and many more
+
+At the end of the match, new powerups are unlocked, and existing powerups can be upgraded.
+
+### 101 mode
+A single player mode where you have to answer 101 questions, which are divided into levels of 5 questions each. If you answer too many questions wrong in a level, you have to restart the level. The goal is to reach question 101. After each level, you unlock new topics and powerups for the versus mode.
+
+## Development
+- core game logic in Unity, like questions, scoring, rewards, in-app purchases and UI.
+- entire server-side logic on gamesparks and later ported it to AWS, covering matchmaking, game/player states, real-time communication
+- Ported matchmaking to Apple's GameKit to integrate with Game Center.
