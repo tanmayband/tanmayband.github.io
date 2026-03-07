@@ -4,9 +4,9 @@ import Icon from './Icon.astro';
 ---
 
 <aside>
-	<h2>Interested in working together?</h2>
+	<h2>Wanna build <span class="something-cool">something cool</span> together?</h2>
 	<CallToAction href="mailto:tanmayband+hi@gmail.com">
-		Send Me a Message
+		Say hi!
 		<Icon icon="paper-plane-tilt" size="1.2em" />
 	</CallToAction>
 </aside>
@@ -19,7 +19,7 @@ import Icon from './Icon.astro';
 		gap: 3rem;
 		border-top: 1px solid var(--gray-800);
 		border-bottom: 1px solid var(--gray-800);
-		padding: 5rem 1.5rem;
+		padding: 1.5rem;
 		background-color: var(--gray-999_40);
 		box-shadow: var(--shadow-sm);
 	}
@@ -27,20 +27,24 @@ import Icon from './Icon.astro';
 	h2 {
 		font-size: var(--text-xl);
 		text-align: center;
-		max-width: 15ch;
+		max-width: 30ch;
+	}
+
+	.something-cool {
+		background: linear-gradient(to right, #c4b000, #ffb889, #c4b000);
+		-webkit-text-fill-color: transparent; -webkit-background-clip: text;
+		/* -webkit-text-stroke: 1px var(--gray-50); */
 	}
 
 	@media (min-width: 50em) {
 		aside {
-			padding: 7.5rem;
-			flex-direction: row;
+			padding: 2rem 5rem;
 			flex-wrap: wrap;
 			justify-content: space-between;
 		}
 
 		h2 {
 			font-size: var(--text-3xl);
-			text-align: left;
 		}
 	}
 </style>

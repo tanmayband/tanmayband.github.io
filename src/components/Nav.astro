@@ -1,22 +1,13 @@
 ---
 import Icon from './Icon.astro';
-import type { iconPaths } from './IconPaths';
 import ThemeToggle from './ThemeToggle.astro';
+import contactDetails from '../../scripts/utils';
 
 /** Main menu items */
 const textLinks: { label: string; href: string }[] = [
 	{ label: 'Home', href: '/' },
 	{ label: 'Work', href: '/work/' },
 	{ label: 'About', href: '/about/' },
-];
-
-/** Icon links to social media — edit these with links to your profiles! */
-const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[] = [
-	{ label: 'Email', href: 'mailto:tanmayband+hi@gmail.com', icon: 'at-logo' },
-	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/tanmayband/', icon: 'linkedin-logo' },
-	{ label: 'itch.io', href: 'https://tanbanman.itch.io/', icon: 'itch-io-logo' },
-	{ label: 'GitHub', href: 'https://github.com/tanmayband', icon: 'github-logo' },
-	// { label: 'YouTube', href: 'https://www.youtube.com/@me/', icon: 'youtube-logo' },
 ];
 
 /** Test if a link is pointing to the current page. */
@@ -60,7 +51,7 @@ const isCurrentPage = (href: string) => {
 		<div class="menu-footer">
 			<div class="socials">
 				{
-					iconLinks.map(({ href, icon, label }) => (
+					contactDetails.map(({ href, icon, label }) => (
 						<a href={href} class="social">
 							<span class="sr-only">{label}</span>
 							<Icon icon={icon} />
@@ -85,7 +76,7 @@ const isCurrentPage = (href: string) => {
 		<div class="menu-footer">
 			<div class="socials">
 				{
-					iconLinks.map(({ href, icon, label }) => (
+					contactDetails.map(({ href, icon, label }) => (
 						<a href={href} class="social">
 							<span class="sr-only">{label}</span>
 							<Icon icon={icon} />
