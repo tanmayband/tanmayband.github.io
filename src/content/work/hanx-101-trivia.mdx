@@ -31,7 +31,7 @@ A multiplayer trivia game on Apple Arcade, created with actor Tom Hanks. You can
 ## Gameplay
 The core gameplay consists of answering questions across multiple topics, and collecting rewards at the end of each round. Two gameplay mode are available.
 ### Versus mode
-Team up with another player for a 2v2, or go solo in a 1v1. Matchmaking is available to find other players, or you can directly invite your friends. Each match consists of multiple round. Between rounds, you can activate power ups to help you or damage your opponents in the next round. Powerups include:
+Team up with another player for a 2v2, or go solo in a 1v1. Matchmaking is available to find other players, or you can directly invite your friends. Each match consists of multiple round. Between rounds, you can activate power up cards to help you or damage your opponents in the next round. Powerups include:
 - Bonus question of a specific topic
 - Extra points to your for right answer
 - Negative points to opponent for right answer
@@ -43,6 +43,19 @@ At the end of the match, new powerups are unlocked, and existing powerups can be
 A single player mode where you have to answer 101 questions, which are divided into levels of 5 questions each. If you answer too many questions wrong in a level, you have to restart the level. The goal is to reach question 101. After each level, you unlock new topics and powerups for the versus mode.
 
 ## Development
-- core game logic in Unity, like questions, scoring, rewards, in-app purchases and UI.
-- entire server-side logic on gamesparks and later ported it to AWS, covering matchmaking, game/player states, real-time communication
-- Ported matchmaking to Apple's GameKit to integrate with Game Center.
+Since the game was multiplayer, the matches were orchestrated on the server, and data was sent to the clients. I implemented the frontend logic to process this data in Unity, like:
+- Questions and options
+- Scoring
+- Rounds
+- Power up card-play between rounds
+- End of match rewards
+- In-app purchases
+- UI and animations for everything
+
+I was also responsible for the entire server-side logic on Gamesparks, which included:
+- Matchmaking
+- Rounds and match states
+- Player progression
+- Disconnect handling
+
+Later, I ported the the entire backend to AWS, and also ported matchmaking to Apple's GameKit to integrate with Game Center.

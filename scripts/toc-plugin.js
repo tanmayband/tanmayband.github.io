@@ -1,4 +1,5 @@
 import { visit } from "unist-util-visit";
+import GithubSlugger from "github-slugger";
 
 function getNodeValue(node) {
   return node.children
@@ -9,6 +10,7 @@ function getNodeValue(node) {
 export default function remarkTableOfContents() {
   return (tree, file) => {
     const toc = [];
+    const slugger = new GithubSlugger();
 
     visit(tree, "heading", (node, index, parent) => {
       // Only consider top level headings
@@ -16,6 +18,7 @@ export default function remarkTableOfContents() {
 
       const depth = node.depth;
       const title = getNodeValue(node);
+      const id = slugger.slug(title);
 
       const href = title
         .toLowerCase()
@@ -23,7 +26,7 @@ export default function remarkTableOfContents() {
         .trim()
         .replace(/\s+/g, "-");
 
-      toc.push({ depth, title, href: `#${href}` });
+      toc.push({ depth, title, href: `#${id}` });
     });
 
     file.data.astro.frontmatter.tableOfContents = toc;

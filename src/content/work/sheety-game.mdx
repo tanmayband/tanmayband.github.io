@@ -4,10 +4,10 @@ publishDate: 2020-03-02 00:00:00
 img: /assets/thumbnails/sheetygame-1.gif
 img_alt: Showcasing the game
 description: |
-    Adventures in architectural plans
+    Adventures in architecture plans
 summary:
     - Unique 2D world and characters
-    - Shooting, puzzles, collectibles and lasers
+    - Shooting, collectibles and lasers
     - Stealth and different enemy types
 tags:
     - Adventure
@@ -16,3 +16,75 @@ tags:
 softwares:
     - unreal
 ---
+import ContentWithCaption from '../../components/ContentWithCaption.astro';
+import Callout from '../../components/Callout.astro';
+import YoutubeEmbed from '../../components/YoutubeEmbed.astro';
+import SG2 from '@media/sheetygame-2.jpg';
+import SG3 from '@media/sheetygame-3.gif';
+import SG4 from '@media/sheetygame-4.jpg';
+import SG5 from '@media/sheetygame-5.gif';
+import SG6 from '@media/sheetygame-6.gif';
+import SG7 from '@media/sheetygame-7.gif';
+import SG8 from '@media/sheetygame-8.jpg';
+
+## What?
+A top-down mobile shooter on a 2D floor plan set in a flat paper world. Each level is a different floor plan, and contains enemies, pickups and puzzles. Features touch controls to move around, interact and shoot.
+
+## Gameplay
+The core loop consists of collecting collectibles called "sheets" on every level. In the process, you will fight enemies, pick up health and ammo, unlock doors and solve puzzles.
+
+<ContentWithCaption src={SG2} caption="Clean loop: Start a level at the staircase, go out and do things, and return back for the next floor."/>
+
+### Enemies
+Three types of enemies exist in the game:
+1. **Static**: These stay in place and shoot.
+2. **Moving**: These pursue the player and shoot.
+3. **Treasurer**: These drop a collectible on death, like a key or a sheet.
+    - Can be static or moving.
+
+<ContentWithCaption src={SG3} caption="Static, moving and treasurer enemies"/>
+
+### Collectibles
+Four types of collectibles exist in the game:
+- **Sheets**: The main collectible, required to complete the level.
+- **Passion**: Replenishes health.
+- **Erasers**: Replenishes ammo.
+- **Keys**: Open locked doors.
+
+<ContentWithCaption src={SG4} caption="Gotta catch 'em all"/>
+
+### Sneak Takedown
+Damage to you (and enemies) shows up as flakes flying off from the body, as if rubbed off by an eraser. You become fainter and fainter, being near-invisible when you're close to death. In such a state, it's harder (not impossible) for enemies to detect you, and you can sneak up behind them. When you do, the usual *shoot* button changes to *takedown* which is a one-shot kill. However, if you end up in front of them, they can still detect you.
+
+<ContentWithCaption src={SG5} caption="Takedown in action"/>
+
+### Long Actions
+Some interactions that take time to complete, like rummaging through drawers or unlocking safes. If you move during the action, it resets. This adds a time-crunch element, especially if you're being shot at.
+
+<ContentWithCaption src={SG6} caption="Long action denoted by a progress bar"/>
+
+### Lasers
+For another layer of threat, along with dodging bullets, dodge lasers. All lasers come with accompanying buttons to temporarily turn them off, and after a cooldown, they turn back on. However, if timed just right, you can make enemies chase you into the lasers, insta-killing them.
+
+<ContentWithCaption src={SG7} caption="Lasers on a cooldown"/>
+
+## Development
+
+### Basics
+I started with Unreal's top down template as it came with touch-based movement and navmesh. For the levels, I drew up a bunch of floor plans in Krita, and imported them into Unreal. Next, I manually placed collision boxes along the walls to shape the navmesh. With the levels ready, I created a player blueprint with a flat mesh and a simple texture, and reused this template for the enemies.
+
+### Controls
+Since this is a mobile game, I needed keep the controls simple, with as few buttons as possible. Since it's a top-down level, I made the movement "tap-to-go": Tap anywhere on the level to move there. Next, a shoot button. I wasn't a fan of joystick control on mobile to orient the gun, so the decision was made to **auto-aim the gun** to the nearest enemy. This way, the player could keep shooting without worrying about aiming. Lastly, an interact button to open doors etc.
+
+<ContentWithCaption src={SG8} caption="Controls layout. Shoot button changes for takedown."/>
+
+### Enemies
+All enemy types were created by reusing the same base class, and overriding functions for their unique behaviours. For example, the static enemy's `Move()` only has rotation, while the moving enemy follows the player along the navmesh. The treasurer enemy has a function to spawn a collectible on death.
+
+Enemies can detect the player by sight, touch or if hit by player's bullets. On detection, they start shooting at the player.
+
+### VFX
+Both the player and enemies leave behind stamp coloured decal trails. When the player is near death, the trail changes to golden. I also added a particle system for the damage flakes.
+
+## Demo
+<YoutubeEmbed id="QrvA4PgfejQ" caption="Sheety Game demo" />

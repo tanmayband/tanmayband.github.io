@@ -19,19 +19,20 @@ softwares:
 import YoutubeEmbed from '../../components/YoutubeEmbed.astro';
 
 ## What?
-A singleplayer puzzle platformer where you play as Pi, a character that lives on the number line. Solve math puzzles and fight number enemies using math-based abilities, like addition, subtraction, and integration and differentiation. The idea of the game is to make complex math concepts tangible and enjoyable.
+A single player puzzle platformer prototype where you play as Pi, a character that lives on the number line. Solve math puzzles and fight number enemies using math-based abilities, like addition, subtraction, and integration and differentiation. The idea of the game is to make complex math concepts tangible and enjoyable.
 
 ## Gameplay
-a "math mode" to manipulate the world using math powers
-- circle shifting of origin
-- differentiation tangent
-- integration area under curve
+The core game loop consists of traversing the world and solving puzzles using math. This is done by activating a "math view" to manipulate geometry, including:
+- Shifting the origin of a circle to move it around
+- Creating a tangent to climb onto by differentiating a curve
+- Buidling a bridge by integrating the area under a curve
 
 ## Development
-- loved the fact that many seemingly complex math concepts can be interpreted as geometry, which works well for a game
-- used procedural mesh to slice for area under curve
-- implemented a slope calculator for the differentiation tangent, which works of any function curve including circles
-- work was ongoing to bring in arithmetic abilities
+I was inspired by the fact that many seemingly complex math concepts can be interpreted as geometry, which works well for a visual medium like a game. I began work by tackling integration, to make area under curve. I built some curves in Blender, along with the areas under them. Next, I used [procedural mesh](https://dev.epicgames.com/documentation/en-us/unreal-engine/BlueprintAPI/Components/ProceduralMesh) so the player could slice them between two points, effectively making it seem like they "integrated" under the curve.
+
+This worked quite well, so I moved onto differentiation. Reusing the same curves, I implemented a slope calculator for the tangent, which works of any function curve including circles. It takes the point on the curve closest to the player, and calculates the slope of the tangent at that point. Then, it creates a new mesh with that angle, which the player can climb onto.
+
+I also implemented moving entire curves around, like shifting a circle up and down as if it were an elevator. Lastly, work was ongoing to bring in arithmetic operations like addition and subtraction to make more puzzles.
 
 ## Demo
 <YoutubeEmbed id="opxyPi9hzfw" caption="Adventures of Pi demo" />

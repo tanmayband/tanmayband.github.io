@@ -34,5 +34,20 @@ The core gameplay loop consists of moving from one room to the next. Some rooms 
 The game was built in UEFN, I used [Verse](https://dev.epicgames.com/documentation/en-us/fortnite/verse-language-reference) heavily for custom systems, some of which I'll outline below.
 
 ### Enemy AI
+In UEFN, we can create custom AI using [NPC Behavior](https://dev.epicgames.com/documentation/en-us/fortnite/create-custom-npc-behavior-in-unreal-editor-for-fortnite) in Verse. I built a variety of monsters with different behaviors, such as:
+- A monster that chases the player 
+- A patrolling monster that kills the player on sight
+- A monster that only chases when the player is not looking at it
+- and so on
+
+Players can hide from the monsters in cupboards, or behind boxes. Some monsters can search for the player from the last-seen location. I used state machines to handle NPC states like patrol, chase and search. Some NPC features aren't available out of the box, so I implemented them using Fortnite devices. For example, for line-of-sight checks, I used [Perception Triggers](https://dev.epicgames.com/documentation/en-us/fortnite/using-perception-trigger-devices-in-fortnite-creative) tied to each monster's "face" to detect if they can see a player or if a player is looking at them.
+
 ### Global Event System
-### Dynamic Cutscenes
+UEFN does not have a global event/delegate system to allow different actors to communicate with each other without direct references. There are devices like [Trigger](https://dev.epicgames.com/documentation/en-us/fortnite/using-trigger-devices-in-fortnite-creative) but they are limited in functionality, and there's a max limit of devices in your map.
+
+To solve this, I implemented a custom device in Verse that acts as a global event listener/dispatcher. It does so by maintaining a map of event names to a list of listener functions. Now, any actor can reference to this global device and listen to or broadcast game events. This made development much easier and iteration much quicker.
+
+### Dynamic Cutscenes and Death Screens
+To ease iteration even further, I implemented a sequencer-driven device in Verse that moves the player camera between dynamically-supplied locations. It also supports transition durations and player control toggles, thus allowing for perfect cutscenes at runtime.
+
+Using this system, I went a step further to build dynamic death screens. It uses a single UI widget to display unique death messages in a cutscene, based on the monster or hazard that killed the player. This also allowed us to show hazard-specific tips and hints.

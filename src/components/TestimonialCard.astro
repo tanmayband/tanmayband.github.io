@@ -23,13 +23,10 @@ const foundWorkPath = foundWork ? `/work/${foundWork.id}` : null;
 		:
 		<p class="testimonial-person">{data.person}</p>
 	}
-	
 	{foundWork ? 
-		<a href={foundWorkPath} target="_blank">
-			<p class="testimonial-project">{data.project}</p>
-		</a>
+			<p class="testimonial-project">for <a href={foundWorkPath} target="_blank">{data.project}</a></p>
 		:
-		<p class="testimonial-project">{data.project}</p>
+		<p class="testimonial-project">for {data.project}</p>
 	}
 </div>
 
