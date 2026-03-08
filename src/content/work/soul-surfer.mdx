@@ -19,3 +19,40 @@ cta:
     - itch
     - https://tanbanman.itch.io/soul-surfer
 ---
+import ContentWithCaption from '../../components/ContentWithCaption.astro';
+import SS2 from '@media/soulsurfer-2.gif';
+import SS3 from '@media/soulsurfer-3.gif';
+import SS4 from '@media/soulsurfer-4.gif';
+import Portal from '@media/portal.gif';
+
+## What?
+A 2D puzzle platformer where you play as a ghost. Phase through walls and possess bodies to interact with the world and escape the lab. Made for [GameDev.tv Game Jam 2022](https://itch.io/jam/gamedevtv-jam-2022) with the theme: *Death is only the beginning.*
+
+## Gameplay
+As a platformer, the core loop is simple: In every level, become a ghost (by jumping into spikes, and other dumb ways to die), move through walls, possess guys, press buttons, open doors, go to the next level, repeat.
+
+<ContentWithCaption src={SS2} caption="Simple core loop"/>
+
+### Ghost Barriers
+Becoming a ghost is generally a superpower; you can pass through everything. So, what's stopping you from moving through all the walls and making a straight escape? If you can go anywhere, then it's not much of a puzzle.
+
+<ContentWithCaption src={SS3} caption="This would be a boring game"/>
+
+To nerf the ghost superpower, I took inspiration from Portal. In that game, your superpower is the portal gun, letting you place portals at convenient locations to zip across a level. However, the game soon introduces dark surfaces on which you cannot place portals, and later, you also meet energy fields which don't allow shooting portals through them.
+
+<ContentWithCaption src={Portal} caption="Portal's dark surfaces and energy fields block portal placement. Also does the glass barrier in the second image."/>
+
+In Soul Surfer, I introduced ghost barriers, which block (nerf) ghost movement, but does not affect normal humans.
+
+<ContentWithCaption src={SS4} caption="No ghost zone"/>
+
+## Development
+I decided to keep the development as simple as possible and focus more on the level/puzzle design. I grabbed a few free assets for the level visuals and basic platforming movement, and got to work.
+
+The first piece I tackled was spawning a ghost and switching control from player-body to player-ghost. Second, have it spawn when the player runs into a *death object*, in this case, spikes. Third, and this was crucial for the concept, auto-possess another body once your ghost comes close to it, and switch control from player-ghost to host-body. Lastly, I added buttons to open doors to the next level.
+
+I implemented the ghost barriers using collision boxes with a custom collision. The ghost object collides with it, but the human object can pass through it.
+
+However, soon, I was almost out of time. Quickly slapping together a level restart and progression system, I concluded with a simple main menu, level select menu and end game screen.
+
+## Try it!

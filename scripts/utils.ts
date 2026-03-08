@@ -19,12 +19,12 @@ const workOrder = [
     "eat-my-beat",
     "blasterchef",
     "80-lvl-3d-metasites",
-    "spark-plugin",
     "horror-doors",
     "hanx-101-trivia",
-    "adventures-of-pi",
-    "sheety-game",
     "soul-surfer",
+    "sheety-game",
+    "spark-plugin",
+    "adventures-of-pi",
     "duality"
 ];
 

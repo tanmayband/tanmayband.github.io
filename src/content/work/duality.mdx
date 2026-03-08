@@ -18,3 +18,41 @@ cta:
     - itch
     - https://tanbanman.itch.io/duality
 ---
+import ContentWithCaption from '../../components/ContentWithCaption.astro';
+import Callout from '../../components/Callout.astro';
+import D2 from '@media/duality-2.gif';
+import D3 from '@media/duality-3.jpg';
+import D4 from '@media/duality-4.png';
+import D5 from '@media/duality-5.gif';
+import Hue from '@media/hue.gif';
+
+## What?
+A mobile puzzle game where you switch between two colours to hide obstacles and navigate through levels. One of my first games, made in Unreal Engine 4.
+
+## Gameplay
+The core gameplay loop is simple: You have to collect all stars in the level, and head to the end point. Black and white boxes block your path, but you can flip between the two colours to hide them. So, for example, when white colour is active, the white boxes are hidden and you can pass through them, but black boxes are solid.
+
+<Callout type="quote" title="Hue">
+    <div slot="content">
+    Shoutout to [Hue](https://store.steampowered.com/app/383270/Hue/), which was released years before, and I discovered after finishing Duality. It supports even more colours and is really cool!
+    <br/>
+    <ContentWithCaption src={Hue} caption="Looks gorgeous"/>
+    </div>
+</Callout>
+
+## Development
+To keep prototyping easy, each level is a grid-based platform, with obstacle boxes and collectible stars strewn along the path, with a goal tile at the end. I started with Unreal Engine's top down template as it came with touch-based movement. The core mechanic came first: show and hide obstacles on pressing a button. I created a blueprint for the obstacles with a colour property and show/hide functionality (and also toggle collisions accordingly.)
+
+<ContentWithCaption src={D2} caption="Obstacle block"/>
+
+Next, I cooked up a tile-generator blueprint to procedurally create the levels. This is a designer-friendly tool to quickly test out level layouts. It takes the overall size of level, indices to place tiles on, indices to spawn obstacles and stars, and more. Each tile is given a random colour for decoration.
+
+<ContentWithCaption src={D3} caption="Procedural generation of a level"/>
+
+Since it is a mobile game, I tied player movement to tapping on the corresponding tile. The game figures out a path from the current position to the tapped position by [A* pathfinding](https://en.wikipedia.org/wiki/A*_search_algorithm), which I implemented in blueprints.
+
+<ContentWithCaption src={D4} caption="Pathfinding blueprint"/>
+
+After generating a bunch of levels and throwing in level transitions, the game was looking pretty good.
+
+## Try it!
