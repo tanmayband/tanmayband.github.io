@@ -29,14 +29,14 @@ const testimonials = await sortTestimonials();
 			<header class="hero">
 				<Hero
 					title="Hello! My name is Tanmay."
-					tagline="I am a Systems Engineer based in India."
+					tagline="I am a Game Systems Engineer based in India."
 					align="start"
 				>
 					<div class="roles">
 						<!-- <Pill><Icon icon="unreal" size="1.33em" /> Unreal Engine</Pill>
 						<Pill><Icon icon="unity" size="1.33em" /> Unity</Pill> -->
 						<Pill><Icon icon="code" size="1.33em" /> Developer</Pill>
-						<Pill><Icon icon="trend-up" size="1.33em" /> Rapid 0 to 1</Pill>
+						<Pill><Icon icon="rocket-launch" size="1.33em" /> Rapid 0 to 1</Pill>
 						<Pill><Icon icon="palette" size="1.33em" /> Creative</Pill>
 						<Pill><Icon icon="trophy" size="1.33em" /> Leader</Pill>
 					</div>
@@ -74,7 +74,7 @@ const testimonials = await sortTestimonials();
 
 				<div class="cta">
 					<CallToAction href="/work/">
-						View All
+						All
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
 				</div>
@@ -98,6 +98,11 @@ const testimonials = await sortTestimonials();
 							))
 						}
 					</Grid>
+				</div>
+				<div class="testimonials-cta">
+					<CallToAction href="https://www.linkedin.com/in/tanmayband/details/recommendations/">
+						More on LinkedIn <Icon icon="arrow-up-right" size="1.2em" />
+					</CallToAction>
 				</div>
 			</section>
 		</main>
@@ -200,7 +205,10 @@ const testimonials = await sortTestimonials();
 	@media (min-width: 50em) {
 		.section {
 			grid-template-columns: repeat(4, 1fr);
-			grid-template-areas: 'header header header header' 'gallery gallery gallery gallery';
+			grid-template-areas:
+				'header header header header'
+				'gallery gallery gallery gallery'
+				'extra-cta extra-cta extra-cta extra-cta';
 			gap: 2rem;
 		}
 
@@ -228,6 +236,11 @@ const testimonials = await sortTestimonials();
 
 		.cta {
 			grid-area: cta;
+		}
+
+		.testimonials-cta {
+			grid-area: extra-cta;
+			margin: auto;
 		}
 	}
 </style>

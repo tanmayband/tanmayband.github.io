@@ -239,7 +239,7 @@ code
 
 .wrapper {
 	width: 100%;
-	max-width: 80%;
+	max-width: 100%;
 	margin-inline: auto;
 	padding-inline: 1.5rem;
 }
@@ -281,6 +281,10 @@ code
 }
 
 @media (min-width: 50em) {
+	.wrapper {
+		max-width: 90%;
+	}
+
 	.lg\:gap-2 {
 		gap: 0.5rem;
 	}

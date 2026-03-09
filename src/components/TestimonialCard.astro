@@ -9,8 +9,9 @@ const { data, id } = Astro.props.testimonial;
 
 const work = await getCollection('work');
 
+const projectExists = data.project.trim().length > 0;
 const foundWork = work.find((entry) => {
-    return id === entry.id
+    return projectExists && id === entry.id
 });
 const foundWorkPath = foundWork ? `/work/${foundWork.id}` : null;
 ---
@@ -23,10 +24,13 @@ const foundWorkPath = foundWork ? `/work/${foundWork.id}` : null;
 		:
 		<p class="testimonial-person">{data.person}</p>
 	}
-	{foundWork ? 
+	{projectExists ? 
+		(foundWork ? 
 			<p class="testimonial-project">for <a href={foundWorkPath} target="_blank">{data.project}</a></p>
-		:
-		<p class="testimonial-project">for {data.project}</p>
+			:
+			<p class="testimonial-project">for {data.project}</p>
+		)
+		: null
 	}
 </div>
 
@@ -35,6 +39,7 @@ const foundWorkPath = foundWork ? `/work/${foundWork.id}` : null;
 		display: flex;
 		flex-direction: column;
 		height: 7rem;
+		padding: 1rem;
 		justify-content: center;
 		align-items: center;
 		text-align: center;

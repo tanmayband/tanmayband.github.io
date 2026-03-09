@@ -12,6 +12,7 @@ interface Props {
 
 const { src, caption = "", width, height } = Astro.props as Props;
 const hasContentSlot = Astro.slots.has("content");
+const figureStyle = width ? `max-width: ${width};` : undefined;
 
 if (!src && !hasContentSlot) {
     throw new Error("ContentWithCaption: provide either `src` or a `slot=\"mcontenta\"` element.");
@@ -26,7 +27,7 @@ if (typeof src === "string") {
 }
 ---
 
-<figure class="img-caption-container rounded-box">
+<figure class="img-caption-container rounded-box" style={figureStyle}>
 	{
 		src ? (
             typeof src === "string" ? (
@@ -45,6 +46,8 @@ if (typeof src === "string") {
 	.img-caption-container {
 		margin-bottom: 1rem;
 		background: var(--gradient-subtle);
+		margin-left: auto;
+		margin-right: auto;
 
 		img {
 			border-radius: initial;
