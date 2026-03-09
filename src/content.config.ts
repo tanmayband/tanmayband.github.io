@@ -23,7 +23,8 @@ export const collections = {
 		schema: z.object({
 			person: z.string(),
 			project: z.string(),
-			link: z.string().optional()
+			link: z.string().optional(),
+			project_link_external: z.string().optional()
 		}),
 	}),
 };
