@@ -16,7 +16,7 @@ export function sortByCustomOrder<T extends { id: string; }>(
 };
 
 const workOrder = [
-    "eat-my-beat",
+    "attuner",
     "blasterchef",
     "80-lvl-3d-metasites",
     "horror-doors",
