@@ -46,6 +46,20 @@ export async function sortTestimonials()
     return sortByCustomOrder(testimonialsEntries, testimonialsOrder);
 }
 
+const postsOrder = [
+  "wondergames",
+  "stonks",
+  "cooking-math",
+  "generalist",
+  "ai-discipline"
+];
+
+export async function sortPosts()
+{
+    const postsEntries = await getCollection("posts");
+    return sortByCustomOrder(postsEntries, postsOrder);
+}
+
 /** Icon links to social media — edit these with links to your profiles! */
 const contactDetails: { label: string; href: string; icon: keyof typeof iconPaths }[] = [
   { 

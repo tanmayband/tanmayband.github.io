@@ -27,4 +27,14 @@ export const collections = {
 			project_link_external: z.string().optional()
 		}),
 	}),
+	posts: defineCollection({
+		// Load Markdown files in the src/content/posts directory.
+		loader: glob({ base: './src/content/posts', pattern: "**/*.{md,mdx}" }),
+		schema: z.object({
+			title: z.string(),
+			description: z.string(),
+			link: z.string(),
+			img: z.string()
+		}),
+	}),
 };

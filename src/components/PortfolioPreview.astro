@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
+import ThumbnailPreview from './ThumbnailPreview.astro';
 
 interface Props {
 	project: CollectionEntry<'work'>;
@@ -9,82 +10,26 @@ interface Props {
 const { data, id } = Astro.props.project;
 ---
 
-<a class="card" href={`/work/${id}`}>
-	<span class="title">
-		{data.title}
-		{data.softwares && (
-				<Icon icon={data.softwares[0]} size="1.33em" />
-			)}
-		</div>
-	</span>
-	<img src={data.img} alt={data.img_alt || ''} loading="lazy" decoding="async" />
-	<ul class="summary">
-		{data.summary.map((line) => <li>{line}</li>)}
-	</ul>
-</a>
+<ThumbnailPreview
+	src={data.img}
+	alt={data.img_alt || ''}
+	title={data.title}
+	icon={data.softwares[0]}
+	href={`/work/${id}`}
+>
+	<div slot="description">
+		<ul class="summary">
+			{data.summary.map((line) => <li>{line}</li>)}
+		</ul>
+	</div>
+
+</ThumbnailPreview>
 
 <style>
-	.card {
-		display: grid;
-		grid-template: auto 1fr / auto 1fr;
-		height: 18rem;
-		background: var(--gradient-subtle);
-		border: 1px solid var(--gray-800);
-		border-radius: 0.75rem;
-		overflow: hidden;
-		box-shadow: var(--shadow-sm);
-		text-decoration: none;
-		font-family: var(--font-brand);
-		font-size: var(--text-lg);
-		font-weight: 500;
-		transition: box-shadow var(--theme-transition);
-	}
-
-	.card:hover {
-		box-shadow: var(--shadow-md);
-	}
-
-	.title {
-		grid-area: 1 / 1 / 2 / 2;
-		z-index: 1;
-		margin: 0.5rem;
-		padding: 0.5rem 1rem;
-		background: var(--gray-999);
-		color: var(--gray-200);
-		border-radius: 0.375rem;
-		font-size: var(--text-base);
-	}
-
-	img {
-		grid-area: 1 / 1 / 3 / 3;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
 	.summary {
-		grid-area: 3 / 1 / 4 / 3;
-		padding-top: 14px;
-		padding-bottom: 14px;
-		padding-right: 14px;
 		list-style: square;
-		color: var(--gray-100);
-		font-size: var(--text-base);
-	}
-
-	@media (min-width: 50em) {
-		.card {
-			height: 28rem;
-			border-radius: 1.5rem;
-		}
-
-		.title {
-			font-size: var(--text-lg);
-			border-radius: 0.9375rem;
-		}
-
-		.summary {
-			font-size: var(--text-md);
-		}
+		
+		/* to decrease the indent so as to match the left-margin and -padding coming from .description */
+		padding-left: 1rem;
 	}
 </style>

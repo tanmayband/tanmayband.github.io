@@ -12,12 +12,12 @@ import Skills from '../components/Skills.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { sortWork, sortTestimonials } from '../../scripts/utils';
+import { sortWork, sortTestimonials, sortPosts } from '../../scripts/utils';
+import ThumbnailPreview from '../components/ThumbnailPreview.astro';
 
-// Content Fetching: List four most recent work projects
 const projects = (await sortWork()).slice(0, 6);
-
 const testimonials = await sortTestimonials();
+const posts = await sortPosts();
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -57,7 +57,7 @@ const testimonials = await sortTestimonials();
 			<section class="section with-background with-cta">
 				<header class="section-header stack gap-2 lg:gap-4">
 					<h3>Selected Work</h3>
-					<p>Take a look at some of my work from the past few years.</p>
+					<p>Some of my work over the years.</p>
 				</header>
 
 				<div class="gallery">
@@ -77,6 +77,35 @@ const testimonials = await sortTestimonials();
 						All
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
+				</div>
+			</section>
+
+			<section class="section with-background with-cta">
+				<header class="section-header stack gap-2 lg:gap-4">
+					<h3>Selected Writing</h3>
+					<p>In-progress work and design ramblings.</p>
+				</header>
+
+				<div class="gallery">
+					<Grid>
+						{
+							posts.map((post) => (
+								<li>
+									<ThumbnailPreview
+										src={post.data.img}
+										title={post.data.title}
+										href={post.data.link}
+										openInNewTab
+									>
+										<div slot="description">
+											<span>{post.data.description}</span>
+										</div>
+
+									</ThumbnailPreview>
+								</li>
+							))
+						}
+					</Grid>
 				</div>
 			</section>
 
